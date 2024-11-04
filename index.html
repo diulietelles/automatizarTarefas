@@ -1,0 +1,158 @@
+<html><head><base href="." target="_blank" />
+<meta charset="utf-8" />
+<title>Botão de Automação de Tarefas</title>
+<style>
+.automation-btn {
+  padding: 15px 30px;
+  font-size: 18px;
+  font-weight: bold;
+  background: linear-gradient(45deg, #2196F3, #00BCD4);
+  color: white;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(33, 150, 243, 0.3);
+  position: relative;
+  overflow: hidden;
+  margin: 20px auto;
+  display: block;
+}
+
+.automation-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(33, 150, 243, 0.4);
+}
+
+.automation-btn:active {
+  transform: translateY(1px);
+}
+
+.automation-btn .icon {
+  display: inline-block;
+  margin-right: 10px;
+}
+
+.automation-btn .loading {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(45deg, #2196F3, #00BCD4);
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+
+.loading.active {
+  display: flex;
+}
+
+.loading-spinner {
+  width: 20px;
+  height: 20px;
+  border: 3px solid #ffffff;
+  border-top: 3px solid transparent;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.task-list {
+  margin: 20px auto;
+  padding: 20px;
+  border-radius: 10px;
+  background: #f5f5f5;
+  display: none;
+  max-width: 400px;
+}
+
+.task-list.active {
+  display: block;
+}
+
+.task-item {
+  margin: 10px 0;
+  padding: 10px;
+  background: white;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+}
+
+.task-item.completed {
+  background: #e8f5e9;
+}
+
+.check-icon {
+  color: #4CAF50;
+  margin-right: 10px;
+}
+</style>
+
+<button class="automation-btn" onclick="startAutomation()">
+  <span class="icon">⚡</span>
+  Automatizar Tarefas
+  <div class="loading">
+    <div class="loading-spinner"></div>
+  </div>
+</button>
+
+<div class="task-list" id="taskList">
+  <h3>Tarefas em Execução:</h3>
+  <div id="taskItems"></div>
+</div>
+
+<script>
+const tasks = [
+  "Verificando e-mails",
+  "Organizando arquivos",
+  "Atualizando calendário",
+  "Sincronizando dados",
+  "Gerando relatórios"
+];
+
+function startAutomation() {
+  const button = document.querySelector('.automation-btn');
+  const loading = document.querySelector('.loading');
+  const taskList = document.querySelector('.task-list');
+  const taskItems = document.getElementById('taskItems');
+  
+  loading.classList.add('active');
+  button.disabled = true;
+  taskList.classList.add('active');
+  taskItems.innerHTML = '';
+
+  tasks.forEach((task, index) => {
+    setTimeout(() => {
+      const taskElement = document.createElement('div');
+      taskElement.className = 'task-item';
+      taskElement.innerHTML = `
+        <span class="check-icon">⭕</span>
+        <span>${task}</span>
+      `;
+      taskItems.appendChild(taskElement);
+
+      setTimeout(() => {
+        taskElement.classList.add('completed');
+        taskElement.querySelector('.check-icon').textContent = '✅';
+        
+        if (index === tasks.length - 1) {
+          loading.classList.remove('active');
+          button.disabled = false;
+          
+          setTimeout(() => {
+            alert('Todas as tarefas foram automatizadas com sucesso!');
+          }, 500);
+        }
+      }, (index + 1) * 1000);
+    }, index * 500);
+  });
+}
+</script>
+</html>
